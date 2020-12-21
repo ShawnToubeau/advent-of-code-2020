@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"strconv"
 	"strings"
 )
 
@@ -87,12 +88,13 @@ func parseBags(file string) []string {
 	return bagRules
 }
 
-func populateBagGraph(g *Graph, bagRules []string, direction string) {
+func populateBagGraph(g *Graph, bagRules []string, direction string, containmentMap map[string]int) {
 	for _, rule := range bagRules {
 		// split to get the bag specs from the rule
 		ruleSpecs := strings.Split(rule, ", ")
 		v1Name := ""
 		v2Name := ""
+		childAmount := 0
 
 		for i, spec := range ruleSpecs {
 			details := strings.Split(spec, " ")
@@ -102,12 +104,16 @@ func populateBagGraph(g *Graph, bagRules []string, direction string) {
 				v1Name = fmt.Sprintf("%v-%v", string(details[0]), string(details[1]))
 			} else { // following bags
 				v2Name = fmt.Sprintf("%v-%v", string(details[1]), string(details[2]))
+				childAmount, _ = strconv.Atoi(details[0])
 			}
 
 			if i != 0 {
 				// create edges if the rule contains 2 or more bag specs
 				if v1Name != "" && v2Name != "" && v2Name != "other-bags." {
 					g.AddEdge(v1Name, v2Name, direction)
+
+					mapKey := fmt.Sprintf("%v-%v", v1Name, v2Name)
+					containmentMap[mapKey] = childAmount
 				} else { // else just add a vertex for the first bag
 					g.AddVertex(v1Name)
 				}
@@ -126,104 +132,76 @@ func hasElem(arr *[]string, elemToFind string) bool {
 	return false
 }
 
-// checks whether an array contains a element
-func hasElemByVal(arr []string, elemToFind string) bool {
-	for _, elem := range arr {
-		if elem == elemToFind {
-			return true
-		}
-	}
-	return false
-}
-
-func traverseUp(g *Graph, vertexKey string, sources *[]string) {
+// Part 1
+func findUniqueParents(g *Graph, vertexKey string, sources *[]string) {
 	for key, value := range g.Vertices[vertexKey].Vertices {
 		// append key if our sources array doesn't contain it already
 		if !hasElem(sources, key) {
 			*sources = append(*sources, key)
 		}
 
-		// while the current vertex has parent vertexes, recursively call traverseUp
+		// while the current vertex has parent vertexes, recursively call findUniqueParents
 		if len(value.Vertices) > 0 {
-			traverseUp(g, key, sources)
+			findUniqueParents(g, key, sources)
 		}
 	}
 }
 
-//func traverseDown (downwardGraph *Graph, upwardGraph *Graph, vertexKey string, sources *[]string) {
-//	leaf := BFS(downwardGraph, vertexKey)
-//
-//	if leaf != "" {
-//
-//	}
-//
-//	for key, value := range g.Vertices[vertexKey].Vertices {
-//		// append key if our sources array doesn't contain it already
-//		if !hasElem(sources, key) {
-//			*sources = append(*sources, key)
-//		}
-//
-//		// while the current vertex has parent vertexes, recursively call traverseUp
-//		if len(value.Vertices) == 0 {
-//			traverseUp(g, key, sources)
-//		}
-//	}
-//}
+// Part 2
+func sumEnclosedChildren(g *Graph, startVertex string, quantityMap map[string]int) {
+	var stack []string
+	// append first vertex
+	stack = append(stack, startVertex)
+	// starting bag quantifier
+	startQuantifier := 1
+	// for every level of children, we'll need to know how many parent bags there are so we can
+	// accurately keep track of the quantities
+	var quantifiers []int
+	quantifiers = append(quantifiers, startQuantifier)
+	// our result
+	res := 0
 
-func BFS(g *Graph, startVertex string) {
-	var visited []string
-	var queue []string
-	prev := make(map[string]string)
-	queue = append(queue, startVertex)
-	visited = append(visited, startVertex)
-	prev[startVertex] = "stop"
-	//var leaf string
+	// loop while our stack isn't empty
+	for len(stack) > 0 {
+		// index of the top element
+		n := len(stack) - 1
+		// pop off top element
+		curr := stack[n]
+		stack = stack[:n]
+		// pop off the top bag quantifier
+		currQuantifiers := quantifiers[n]
+		quantifiers = quantifiers[:n]
+		// push every child of the current element onto the stack
+		for _, vertex := range g.Vertices[curr].Vertices {
+			// quantity map accessor, `parent-bag`-`child-bag` = # of children within the parent
+			mapKey := fmt.Sprintf("%v-%v", curr, vertex.Key)
+			// using the known quantity and the quantifier we know exactly how many multiples of the children there are
+			res = res + currQuantifiers*quantityMap[mapKey]
 
-	for len(queue) > 0 {
-		// pop off first element
-		curr := queue[0]
-		queue = queue[1:]
-
-		for key, vertex := range g.Vertices[curr].Vertices {
-			prev[key] = curr
-
-			if len(vertex.Vertices) == 0 {
-				fmt.Printf("Found leaf: %v\n", key)
-				//leaf = key
-
-				//queue = nil
-				//break
-			}
-
-			if !hasElemByVal(visited, vertex.Key) {
-				queue = append(queue, key)
-				visited = append(visited, key)
-			}
+			stack = append(stack, vertex.Key)
+			// record this iterations children quantities for future bag children
+			quantifiers = append(quantifiers, currQuantifiers*quantityMap[mapKey])
 		}
 	}
 
-	//for leaf != "stop" {
-	fmt.Printf("%v\n", prev)
-	//	leaf = prev[leaf]
-	//}
-
-	//return ""
+	fmt.Printf("Num bags %v\n", res)
 }
 
 func main() {
-	//upwardGraph := NewGraph()
+	upwardGraph := NewGraph()
 	downwardGraph := NewGraph()
-	//var uniqueSources []string
+	containmentMap := make(map[string]int)
+	var uniqueSources []string
 
 	bagRules := parseBags("./bags.txt")
 
-	//populateBagGraph(upwardGraph, bagRules, UP)
-	//
-	//traverseUp(upwardGraph, "shiny-gold", &uniqueSources)
-	//
-	//fmt.Printf("Sources %v\n", len(uniqueSources))
+	populateBagGraph(upwardGraph, bagRules, UP, make(map[string]int))
 
-	populateBagGraph(downwardGraph, bagRules, DOWN)
+	findUniqueParents(upwardGraph, "shiny-gold", &uniqueSources)
 
-	BFS(downwardGraph, "shiny-gold")
+	fmt.Printf("Sources %v\n", len(uniqueSources))
+
+	populateBagGraph(downwardGraph, bagRules, DOWN, containmentMap)
+
+	sumEnclosedChildren(downwardGraph, "shiny-gold", containmentMap)
 }
