@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d6c59afb-dd75-4ba7-be16-a2763237a4dd" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/Day8/instructions.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Day8/main.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Day7/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/Day7/main.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,6 +43,7 @@
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
     <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
   </component>
   <component name="RecentsManager">
@@ -75,6 +77,7 @@
     <MESSAGE value="Adds day 5" />
     <MESSAGE value="Adds day 6" />
     <MESSAGE value="Adds day 7 part 1" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adds day 7 part 1" />
+    <MESSAGE value="Adds day 7 part 2" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adds day 7 part 2" />
   </component>
 </project>
