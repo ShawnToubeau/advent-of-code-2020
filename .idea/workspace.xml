@@ -78,6 +78,7 @@
     <MESSAGE value="Adds day 7 part 1" />
     <MESSAGE value="Adds day 7 part 2" />
     <MESSAGE value="Adds ReadFile utility function (finally!)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adds ReadFile utility function (finally!)" />
+    <MESSAGE value="Solves day 9 part 1" />
+    <option name="LAST_COMMIT_MESSAGE" value="Solves day 9 part 1" />
   </component>
 </project>
