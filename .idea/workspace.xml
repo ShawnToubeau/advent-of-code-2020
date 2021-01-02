@@ -2,11 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d6c59afb-dd75-4ba7-be16-a2763237a4dd" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Day10/adaptors.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Day10/main.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Day10/test.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/utils.go" beforeDir="false" afterPath="$PROJECT_DIR$/utils/utils.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Day10/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/Day10/main.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -83,6 +80,7 @@
     <MESSAGE value="Adds ReadFile utility function (finally!)" />
     <MESSAGE value="Solves day 9 part 1" />
     <MESSAGE value="Solves day 9 part 2" />
-    <option name="LAST_COMMIT_MESSAGE" value="Solves day 9 part 2" />
+    <MESSAGE value="Solves day 10 part 1, started part 2" />
+    <option name="LAST_COMMIT_MESSAGE" value="Solves day 10 part 1, started part 2" />
   </component>
 </project>
