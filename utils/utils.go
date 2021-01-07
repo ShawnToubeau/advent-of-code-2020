@@ -38,3 +38,27 @@ func Abs(x int) int {
 	}
 	return x
 }
+
+// ArrContainsElem check whether a string array contains a specific string
+func ArrContainsElem(arr []string, elem string) bool {
+	for i := range arr {
+		if arr[i] == elem {
+			return true
+		}
+	}
+
+	return false
+}
+
+// ArrNumOfOccurrences returns the number of occurrences an element is present in an array
+func ArrNumOfOccurrences(arr []string, elem string) int {
+	count := 0
+
+	for _, s := range arr {
+		if s == elem {
+			count++
+		}
+	}
+
+	return count
+}
